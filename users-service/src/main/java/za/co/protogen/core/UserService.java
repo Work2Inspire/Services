@@ -10,7 +10,7 @@ public interface UserService {
     //Adds a new user to the service.
     void removeUser(User user);
     //Removes a user from the service.
-    User getUserById(String id);
+    User getUserById(Long id);
     //Retrieves a user from the service based on their unique identifier.
     List<User> getAllUsers();
     //Retrieves a list of all users in the service.

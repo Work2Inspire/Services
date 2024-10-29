@@ -9,6 +9,11 @@ public class User {
     private LocalDate dateOfBirth;
     private String rsaID;
 
+    @Override
+    public String toString() {
+        return "User{Userid='"+id+"', FirstName="+firstName+"', LastName="+LastName+"', RSAid="+rsaID+"', DOB="+dateOfBirth+" }";
+    }//For better retrieval
+
     //getter
     public long getId() {
         return id;

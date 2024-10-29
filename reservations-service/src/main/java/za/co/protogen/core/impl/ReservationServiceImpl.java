@@ -78,7 +78,7 @@ public class ReservationServiceImpl implements ReservationService {
                     iSuccess++;
                 }
                 if (iSuccess==splitStringCriteria.size()){
-                    //Using their index, i, Find its Car object equivalent and Add to listToReturn
+                    //Using their index, i, Find its reservation object equivalent and Add to listToReturn
                     ListToReturn.add(Constant.reservations.get(i));
                 }
             }//Cycle through split string

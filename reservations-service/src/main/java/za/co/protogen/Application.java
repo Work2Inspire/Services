@@ -11,6 +11,48 @@ import java.util.Scanner;
 
 public class Application {
     public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("System running--------------\n");
+        String ansOpWhile="";
+        while (ansOpWhile!="f"){
+
+            System.out.println("Please select what to run (case sensitive)");
+            System.out.println("a. Add Reservation\n" +
+                    "b. Remove Reservation\n" +
+                    "c.Get all Reservations\n" +
+                    "d.Update Reservation byId\n" +
+                    "e.Search for a Reservation\n" +
+                    "f.exit");
+            String ansOption=scanner.nextLine();
+            ansOpWhile=ansOption;
+
+            switch (ansOption){
+                case "a":
+                    Add_Res.main(args);
+                    break;
+                case "b":
+                    Remove_Res.main(args);
+                    break;
+                case "c":
+                    GetAll_Reservations.main(args);
+                    break;
+                case "d":
+                    Update_Res.main(args);
+                    break;
+                case "e":
+                    Search_Res.main(args);
+                    break;
+                case "f":
+                    System.exit(0);
+                    break;
+            }
+        }
+    }
+}
+
+class Add_Res {
+    public static void main(String[] args) {
         ReservationService resService = new ReservationServiceImpl();
         Scanner scanner = new Scanner(System.in);
 
@@ -29,6 +71,13 @@ public class Application {
         System.out.println(Constant.reservations);
         System.out.println("Reservation has been added successfully");
         System.out.println("There is now "+Constant.reservations.size()+" reservations\n");
+    }
+}
+
+class Remove_Res {
+    public static void main(String[] args) {
+        ReservationService resService = new ReservationServiceImpl();
+        Scanner scanner = new Scanner(System.in);
 
         //Remove a Reservation
         System.out.println("Search then remove a car-----------------------");
@@ -36,43 +85,55 @@ public class Application {
         System.out.println("Reservation has been added successfully");
         System.out.println("There is now "+Constant.reservations.size()+" reservation\n");
 
+    }
+}
+
+class GetAll_Reservations {
+    public static void main(String[] args) {
+        ReservationService resService = new ReservationServiceImpl();
+        Scanner scanner = new Scanner(System.in);
+
         //get all Reservation
         System.out.println("get all cars----------------------------");
         System.out.println(resService.getAllReservations());
         System.out.println("All reservations printed\n");
 
-        //Search Reservation
+    }
+}
 
+class Update_Res {
+    public static void main(String[] args) {
+        ReservationService resService = new ReservationServiceImpl();
+        Scanner scanner = new Scanner(System.in);
 
         //update reservations
-        System.out.println("update car--------------------");
+        System.out.println("update Reservation--------------------");
 
         //Enter reservation ID then retrieve reservation from List
-        System.out.println("Enter reservation ID of the reservation to update");
+        System.out.println("Enter Reservation ID to update");
         String ansReservation= scanner.nextLine();
         Reservation ResToUpdate=resService.getReservationById(Long.parseLong(ansReservation)); //Retrieve Reservation to Update
 
         List<String> listofChoices =new ArrayList<>(); // List choices to Update, as string
 
         String strChoices = "a.Id: " + ResToUpdate.getId() + "\n" //users choices in string
-                + "b.UserId: " + ResToUpdate.getUserId() + "\n"
-                + "e.Car Id: " + ResToUpdate.getCarId() + "\n"
-                + "c.From Date: " + ResToUpdate.getFromDate() + "\n"
-                + "d.To Date: " + ResToUpdate.getToDate() + "\n"
+                + "b.ReservationId: " + ResToUpdate.getUserId() + "\n"
+                + "c.CarId: " + ResToUpdate.getCarId() + "\n"
+                + "d.From Date: " + ResToUpdate.getFromDate() + "\n"
+                + "e.To Date: " + ResToUpdate.getToDate() + "\n"
                 + "f.DropoffLocation: " + ResToUpdate.getDropoffLocation() + "\n"
                 + "g.PickUpLocation: " + ResToUpdate.getPickUpLocation() + "\n";
 
         listofChoices= List.of(strChoices.split("\n")); //split user update choices and places in List
 
-        for (int i = 0; i < listofChoices.size() ; i++) { //Display User update choices
+        for (Integer i = 0; i < listofChoices.size() ; i++) { //Display User update choices
             System.out.println(listofChoices.get(i));
         }
         System.out.println("Using the letters,What do you want to update? (case-sensitive)");
-
         String ansUpdate=""; //stores what user wants to update
         String ansUpdateTo=""; //stores what user wants to update value to
 
-        boolean GoodInput=false;
+        Boolean GoodInput=false;
         while (!GoodInput) { //repeat until user inputs correctly
             ansUpdate = scanner.nextLine();
             if (ansUpdate.length() == 1 && ansUpdate.charAt(0) >= 'a' && ansUpdate.charAt(0) <= 'k') {
@@ -80,17 +141,25 @@ public class Application {
                 System.out.println("Update to what?");
                 ansUpdateTo = scanner.nextLine();
             }
+            else{
+                System.out.println("Try Again");
+            }
         }
         resService.updateReservation(ResToUpdate,ansUpdate,ansUpdateTo);
 
         System.out.println(ResToUpdate);
         System.out.println("Reservation updated successfully\n");
+    }
+}
 
+class Search_Res {
+    public static void main(String[] args) {
+        ReservationService resService = new ReservationServiceImpl();
+        Scanner scanner = new Scanner(System.in);
         //Search cars
         System.out.println("Search for Reservation--------------------------");
         System.out.println("Enter any Criteria--------------------------");
         String ansSearchCriteria = scanner.nextLine();
         System.out.println("Returned: \n"+resService.searchReservations(ansSearchCriteria)+"\n");
-
     }
 }
