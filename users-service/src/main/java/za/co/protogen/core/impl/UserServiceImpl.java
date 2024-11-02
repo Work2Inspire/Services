@@ -1,5 +1,6 @@
 package za.co.protogen.core.impl;
 
+import org.jvnet.hk2.annotations.Service;
 import za.co.protogen.core.UserService;
 import za.co.protogen.domain.User;
 import za.co.protogen.utility.Constant;
@@ -8,23 +9,27 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
     @Override
-    public void addUser(User user) {
+    public String addUser(User user) {
         Constant.users.add(user);
+        String returnString="";
+
+        for (int i = 0; i < Constant.users.size(); i++) {
+            returnString+=Constant.users.get(i).toString()+"<br/>";
+        }
+        return "User added Successfully<br/><br/>"+returnString;
     }
     @Override
-    public void removeUser(User user) {
+    public String removeUser(User user) {
         Constant.users.remove(user);
-//        try {
-//            Constant.users.remove(user);
-//            System.out.println("User has been removed successfully");
-//        }
-//        catch (Exception e){
-//            System.out.println(e);
-//            System.out.println("Something unexpected occured. Try again");
-//        }
+        String returnString="";
 
+        for (int i = 0; i < Constant.users.size(); i++) {
+            returnString+=Constant.users.get(i).toString()+"<br/>";
+        }
+        return "User removed Successfully<br/><br/>"+returnString;
     }
     @Override
     public User getUserById(Long id) {
@@ -36,23 +41,25 @@ public class UserServiceImpl implements UserService {
         return Constant.users;
     }
     @Override
-    public void updateUser(User user,String ansUpdateWhat,String ansUpdateTo) {
+    public String updateUser(User user,String ansUpdateWhat,String ansUpdateTo) {
         switch (ansUpdateWhat) {
             case "a":
                 user.setId(Long.parseLong(ansUpdateTo));
-                break;
+                return "Update successful<br/>"+user;
             case "b":
                 user.setFirstName(ansUpdateTo);
-                break;
+                return "Update successful<br/>"+user;
             case "c":
                 user.setLastName(ansUpdateTo);
-                break;
+                return "Update successful<br/>"+user;
             case "d":
                 user.setDateOfBirth(LocalDate.parse(ansUpdateTo));
-                break;
+                return "Update successful<br/>"+user;
             case "e":
                 user.setRsaId(ansUpdateTo);
-                break;
+                return "Update successful<br/>"+user;
+            default:
+                return "Nothing Updated";
         }
     }
     @Override

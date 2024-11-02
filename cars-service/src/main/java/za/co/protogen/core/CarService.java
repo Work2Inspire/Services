@@ -1,15 +1,17 @@
 package za.co.protogen.core;
 
+import org.jvnet.hk2.annotations.Service;
 import za.co.protogen.domain.Car;
 
 import java.util.List;
 import java.math.BigDecimal;
 
+@Service
 public interface CarService {
 
-    void addCar(Car car);
+    String addCar(Car car);
     //adds a car to the List of cars in service
-    void removeCar(Car car);
+    String removeCar(Car car);
     //removes a car from the List of cars in service
 
     Car getCarById(String vin);
@@ -27,7 +29,7 @@ public interface CarService {
     List<Car> getCarsByColor(String color);
     //Retrieves a list of cars with the specified color.
 
-    void updateCar(Car car,String ansUpdate,String ansUpdateTo);
+    String updateCar(Car car,String ansUpdate,String ansUpdateTo);
     //Updates the information or attributes of a car.
 
     double calculateAverageMileage();

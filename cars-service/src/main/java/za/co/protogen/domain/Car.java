@@ -37,6 +37,21 @@ public class Car {
         return "Car{make='"+make+"', model="+model+"', year="+year+"', color="+color+"', engine="+engine+"', transmission="+transmission+"', fuelType="+fuelType+"', mileage="+mileage+"', vin="+vin+"', price="+price+"', ownerId="+ownerId+"', features="+features+" }";
     }//For better retrieval
 
+//    Car(String make,String model,int year,String color,String engine,String transmission,String fuelType,int mileage,String vin,int price,int ownerId,List<String> features){
+//        this.make=make;
+//        this.model=model;
+//        this.year=year;
+//        this.color=color;
+//        this.engine=engine;
+//        setTransmission(transmission);
+//        setFuelType(fuelType);
+//        this.mileage=mileage;
+//        this.vin=vin;
+//        this.price=price;
+//        this.ownerId=ownerId;
+//        this.features=features;
+//    }
+
     //setter methods for every property declared------------------------------------------------
     public void setMake(String make){
         this.make=make;

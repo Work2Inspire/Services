@@ -10,18 +10,21 @@ import java.util.List;
 
 public class ReservationServiceImpl implements ReservationService {
     @Override
-    public void addReservation(Reservation res) {
+    public String addReservation(Reservation res) {
         Constant.reservations.add(res);
+        return "Reservation added suceessfully <br/>"+getAllReservations();
     }
 
     @Override
-    public void removeReservation(Reservation res) {
+    public String removeReservation(Reservation res) {
         Constant.reservations.remove(res);
+        return "Reservation Removed Successfully <br/>All Reservations"+getAllReservations();
     }
 
     @Override
     public Reservation getReservationById(Long id) {
         return Constant.reservations.stream().filter(a->a.getId()==id).findFirst().orElse(null);
+
     }
 
     @Override
@@ -30,31 +33,29 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void updateReservation(Reservation res,String ansUpdate,String ansUpdateTo) {
-
+    public String updateReservation(Reservation res,String ansUpdate,String ansUpdateTo) {
 
         switch (ansUpdate) {
             case "a" :
                 res.setId(Long.parseLong(ansUpdateTo));
-                break;
+                return "Updated successfully <br/>"+res;
             case "b":
                 res.setUserId(Long.parseLong(ansUpdateTo));
-                break;
+                return "Updated successfully <br/>"+res;
             case "c":
                 res.setCarId(Long.parseLong(ansUpdateTo));
-                break;
+                return "Updated successfully <br/>"+res;
             case "d":
                 res.setFromDate(LocalDate.parse(ansUpdateTo));
-                break;
+                return "Updated successfully <br/>"+res;
             case "e":
                 res.setToDate(LocalDate.parse(ansUpdateTo));
-                break;
+                return "Updated successfully <br/>"+res;
             case "f":
                 res.setDropoffLocation(ansUpdateTo);
-                break;
-            case "g":
-                res.setPickUpLocation(ansUpdateTo);
-                break;
+                return "Updated successfully <br/>"+res;
+            default:
+                return "Something went wrong. Not Updated";
         }
     }
 
