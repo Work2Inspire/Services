@@ -1,7 +1,8 @@
 package za.co.protogen.core;
 
 import org.jvnet.hk2.annotations.Service;
-import za.co.protogen.domain.Reservation;
+import za.co.protogen.domain.reservation;
+import za.co.protogen.persistence.Reservation;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface ReservationService {
         //Retrieves a reservation from the service based on its unique identifier.
     List<Reservation> getAllReservations();
         //Retrieves a list of all reservations in the service.
-    String updateReservation(Reservation res,String ansUpdate,String ansUpdateTo);
+    String updateReservation(Reservation res, String ansUpdate, String ansUpdateTo);
         //Updates the information or attributes of a reservation.
     List<Reservation> searchReservations(String criteria);
     //Searches for reservations based on various criteria, such as user ID, car ID, dates, etc.

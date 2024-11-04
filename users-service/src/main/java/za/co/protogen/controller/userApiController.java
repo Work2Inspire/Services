@@ -6,20 +6,21 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import za.co.protogen.core.UserService;
 import za.co.protogen.core.impl.UserServiceImpl;
-import za.co.protogen.domain.User;
-import za.co.protogen.utility.Constant;
+import za.co.protogen.persistence.User;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/ctrl/")
-public class userApiController {
+public class userApiController { //9101
 
+    private UserServiceImpl userServiceImpl;    
     @Autowired
-    private RestTemplate restTemplate;
-    UserService userService = new UserServiceImpl();
-
+    public userApiController(UserServiceImpl usImpl){
+        this.userServiceImpl=usImpl;
+    }
+    
     @RequestMapping("/add_user")
     public String Add_User(@RequestParam Long Id, @RequestParam String fName, @RequestParam String lName, @RequestParam LocalDate DOB, @RequestParam String rsaId){
         User newUser = new User();
@@ -28,32 +29,29 @@ public class userApiController {
         newUser.setLastName(lName);
         newUser.setDateOfBirth(DOB);
         newUser.setRsaId(rsaId);
-        return userService.addUser(newUser);
+        return userServiceImpl.addUser(newUser);
     }
 
     @RequestMapping("/remove_user")
     public String Remove_User(@RequestParam Long Id){
-        if(userService.getUserById(Id)==null){
+        User receivedUser = userServiceImpl.getUserById(Id);
+        if(receivedUser==null){
             return "Nothing Removed: Id not found/Empty Id";
         }
-        return userService.removeUser(userService.getUserById(Id));
+        return userServiceImpl.removeUser(receivedUser);
     }
 
     @GetMapping("/getuser_id")
     public String getBy_id(@RequestParam Long Id){
-        if(userService.getUserById(Id)==null){
-            return "Id not found/Empty Id";
+        if(userServiceImpl.getUserById(Id)==null){
+            return "Error: Id not found/Empty Id input";
         }
-        return userService.getUserById(Id).toString();
+        return userServiceImpl.getUserById(Id).toString();
     }
 
     @GetMapping("/getAll_users")
     public String getAll(){
-        String returnString="";
-        for (int i = 0; i < userService.getAllUsers().size(); i++) {
-            returnString+=userService.getAllUsers().get(i).toString()+"<br/>";
-        }
-        return returnString;
+        return userServiceImpl.getAllUsers();
     }
 
     @RequestMapping("/update/{id}/{sWhat}/{sTo}")
@@ -65,21 +63,20 @@ public class userApiController {
         //d.DOB
         //e.RSAid
 
-        User upUser=userService.getUserById(id);
+        User upUser=userServiceImpl.getUserById(id);
 
-        if (!(sWhat.length() == 1 && sWhat.charAt(0) >= 'a' && sWhat.charAt(0) <= 'k')) {
+        if (!(sWhat.length() == 1 && sWhat.charAt(0) >= 'a' && sWhat.charAt(0) <= 'e')) {
             return "Error: Option is invalid";
         }
         if (upUser==null){
             return "Error: Reservation not found";
         }
-
-        return userService.updateUser(upUser,sWhat,sTo);
+        return userServiceImpl.updateUser(upUser,sWhat,sTo);
     }
 
     @GetMapping("/search/{criteria}")
     public String search_User(@PathVariable String criteria){
-        List<User> returnedList=userService.searchUsers(criteria);
+        List<User> returnedList=userServiceImpl.searchUsers(criteria);
         StringBuilder returnString= new StringBuilder();
 
         if (returnedList.isEmpty()){

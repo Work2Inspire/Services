@@ -1,0 +1,20 @@
+--CREATE TABLE IF NOT EXISTS car (
+--    vin VARCHAR(255) NOT NULL PRIMARY KEY,
+--    make VARCHAR(255),
+--    model VARCHAR(255),
+--    iyear INTEGER,
+--    color VARCHAR(255),
+--    engine VARCHAR(255),
+--    transmission VARCHAR(255),
+--    fuelType VARCHAR(255),
+--    mileage INTEGER,
+--    price INTEGER,
+--    ownerId INTEGER,
+--    features VARCHAR(255)
+--);
+
+--INSERT INTO car (vin,make,model,iyear,color,engine,transmission,fuelType,mileage,price,ownerId,features)
+--VALUES ('ABC123', 'Toyota','Corolla',2021,'White','1.8L','Automatic','Gasoline',10000,25000,123,NULL)
+---
+--INSERT INTO car (vin,make,model,year,color,engine,transmission,fuelType,mileage,price,ownerId,features)
+--VALUES ('XYZ789','Honda','Civic',2021,'Red','1.5L','CVT','Gasoline',15000,22000,456,' ')

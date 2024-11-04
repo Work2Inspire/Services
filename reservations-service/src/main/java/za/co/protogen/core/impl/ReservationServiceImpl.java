@@ -1,62 +1,79 @@
 package za.co.protogen.core.impl;
 
+import org.jvnet.hk2.annotations.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import za.co.protogen.core.ReservationService;
-import za.co.protogen.domain.Reservation;
+import za.co.protogen.domain.reservation;
+import za.co.protogen.persistence.Reservation;
+import za.co.protogen.persistence.repository.ResRepository;
 import za.co.protogen.utility.Constant;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationServiceImpl implements ReservationService {
+@Service
+@Component
+public class ReservationServiceImpl implements ReservationService { //port = 9103
+    private final ResRepository resRepo;
+
+    @Autowired
+    public ReservationServiceImpl(ResRepository resRepo){
+        this.resRepo=resRepo;
+    }
+
     @Override
     public String addReservation(Reservation res) {
-        Constant.reservations.add(res);
+//        Constant.reservations.add(res);
+        resRepo.save(res);
         return "Reservation added suceessfully <br/>"+getAllReservations();
     }
 
     @Override
     public String removeReservation(Reservation res) {
-        Constant.reservations.remove(res);
-        return "Reservation Removed Successfully <br/>All Reservations"+getAllReservations();
+//        Constant.reservations.remove(res);
+        resRepo.delete(res);
+        return "Reservation Removed Successfully <br/>All Reservations:<br/>"+getAllReservations();
     }
 
     @Override
     public Reservation getReservationById(Long id) {
-        return Constant.reservations.stream().filter(a->a.getId()==id).findFirst().orElse(null);
+        return resRepo.findAll().stream().filter(a->a.getId()==id).findFirst().orElse(null);
 
     }
 
     @Override
     public List<Reservation> getAllReservations() {
-        return Constant.reservations;
+//        return Constant.reservations;
+        return resRepo.findAll();
     }
 
     @Override
-    public String updateReservation(Reservation res,String ansUpdate,String ansUpdateTo) {
+    public String updateReservation(Reservation res, String ansUpdate, String ansUpdateTo) {
 
         switch (ansUpdate) {
             case "a" :
                 res.setId(Long.parseLong(ansUpdateTo));
-                return "Updated successfully <br/>"+res;
+                break;
             case "b":
                 res.setUserId(Long.parseLong(ansUpdateTo));
-                return "Updated successfully <br/>"+res;
+                break;
             case "c":
                 res.setCarId(Long.parseLong(ansUpdateTo));
-                return "Updated successfully <br/>"+res;
+                break;
             case "d":
                 res.setFromDate(LocalDate.parse(ansUpdateTo));
-                return "Updated successfully <br/>"+res;
+                break;
             case "e":
                 res.setToDate(LocalDate.parse(ansUpdateTo));
-                return "Updated successfully <br/>"+res;
+                break;
             case "f":
                 res.setDropoffLocation(ansUpdateTo);
-                return "Updated successfully <br/>"+res;
-            default:
-                return "Something went wrong. Not Updated";
+                break;
         }
+        resRepo.save(res);
+        return "Updated successfully <br/>"+res;
     }
 
     @Override
@@ -68,7 +85,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         splitStringCriteria = List.of(criteria.split(" ")); // split criteria into array
 
-        strListOfRes=Constant.reservations.stream().map(Reservation::toString).toList();
+        strListOfRes=resRepo.findAll().stream().map(Reservation::toString).toList();
         //Transform car objects from Constant.cars list into List of String
 
         for (int i = 0; i < strListOfRes.size(); i++) {
@@ -79,8 +96,8 @@ public class ReservationServiceImpl implements ReservationService {
                     iSuccess++;
                 }
                 if (iSuccess==splitStringCriteria.size()){
-                    //Using their index, i, Find its reservation object equivalent and Add to listToReturn
-                    ListToReturn.add(Constant.reservations.get(i));
+                    //Using their index, i, Find its Reservation object equivalent and Add to listToReturn
+                    ListToReturn.add(resRepo.findAll().get(i));
                 }
             }//Cycle through split string
 

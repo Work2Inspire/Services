@@ -1,8 +1,12 @@
 package za.co.protogen.core.impl;
 
 import org.jvnet.hk2.annotations.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import za.co.protogen.core.UserService;
-import za.co.protogen.domain.User;
+import za.co.protogen.domain.user;
+import za.co.protogen.persistence.User;
+import za.co.protogen.persistence.repository.UserRepository;
 import za.co.protogen.utility.Constant;
 
 import java.time.LocalDate;
@@ -10,57 +14,65 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Component
 public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepo;
+    @Autowired
+    public UserServiceImpl (UserRepository userRepo){
+        this.userRepo=userRepo;
+    }
+
     @Override
     public String addUser(User user) {
-        Constant.users.add(user);
+//        Constant.users.add(user);
+        userRepo.save(user);
         String returnString="";
 
-        for (int i = 0; i < Constant.users.size(); i++) {
-            returnString+=Constant.users.get(i).toString()+"<br/>";
-        }
-        return "User added Successfully<br/><br/>"+returnString;
+        return "User added Successfully<br/><br/>";//+getAllUsers();
     }
     @Override
     public String removeUser(User user) {
-        Constant.users.remove(user);
+//        Constant.users.remove(user);
+        userRepo.delete(user);
         String returnString="";
 
-        for (int i = 0; i < Constant.users.size(); i++) {
-            returnString+=Constant.users.get(i).toString()+"<br/>";
-        }
-        return "User removed Successfully<br/><br/>"+returnString;
+        return "User removed Successfully<br/><br/>"+getAllUsers();
     }
     @Override
     public User getUserById(Long id) {
         long longId=id;
-        return Constant.users.stream().filter(a->a.getId()==longId).findFirst().orElse(null);
+        return userRepo.findAll().stream().filter(a->a.getId()==longId).findFirst().orElse(null);
     }
     @Override
-    public List<User> getAllUsers() {
-        return Constant.users;
+    public String getAllUsers() {
+        String returnString="";
+        for (int i = 0; i < userRepo.findAll().size(); i++) {
+            returnString+=userRepo.findAll().get(i).toString()+"<br/>";
+        }
+        return returnString;
     }
     @Override
-    public String updateUser(User user,String ansUpdateWhat,String ansUpdateTo) {
+    public String updateUser(User user, String ansUpdateWhat, String ansUpdateTo) {
         switch (ansUpdateWhat) {
             case "a":
                 user.setId(Long.parseLong(ansUpdateTo));
-                return "Update successful<br/>"+user;
+                break;
             case "b":
                 user.setFirstName(ansUpdateTo);
-                return "Update successful<br/>"+user;
+                break;
             case "c":
                 user.setLastName(ansUpdateTo);
-                return "Update successful<br/>"+user;
+                break;
             case "d":
                 user.setDateOfBirth(LocalDate.parse(ansUpdateTo));
-                return "Update successful<br/>"+user;
+                break;
             case "e":
                 user.setRsaId(ansUpdateTo);
-                return "Update successful<br/>"+user;
-            default:
-                return "Nothing Updated";
+                break;
         }
+        userRepo.save(user);
+        return "Update successful<br/>"+user;
     }
     @Override
     public List<User> searchUsers(String criteria) {
@@ -71,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
         splitStringCriteria = List.of(criteria.split(" ")); // split criteria into array
 
-        strListOfUsers=Constant.users.stream().map(User::toString).toList();
+        strListOfUsers=userRepo.findAll().stream().map(User::toString).toList();
         //Transform user objects from Constant.users list into List of String
 
         for (int i = 0; i < strListOfUsers.size(); i++) {
@@ -83,7 +95,7 @@ public class UserServiceImpl implements UserService {
                 }
                 if (iSuccess==splitStringCriteria.size()){
                     //Using their index, i, Find its User object equivalent and Add to listToReturn
-                    ListToReturn.add(Constant.users.get(i));
+                    ListToReturn.add(userRepo.findAll().get(i));
                 }
             }//Cycle through split string
 

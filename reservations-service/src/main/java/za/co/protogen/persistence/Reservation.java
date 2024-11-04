@@ -1,8 +1,14 @@
-package za.co.protogen.domain;
+package za.co.protogen.persistence;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
-
+@Entity
+@Table(name = "Reservations")
 public class Reservation {
+    @Id
     private Long id;
     //The unique identifier for the reservation (type: Long).
     private Long userId;
@@ -68,15 +74,6 @@ public class Reservation {
     public void setDropoffLocation(String dropoffLocation) {
         this.dropoffLocation = dropoffLocation;
     }
+
+
 }
-
-
-
-
-//id: The unique identifier for the reservation (type: Long).
-//userId: The unique identifier for the user associated with the reservation (type: Long).
-//carId: The unique identifier for the car reserved (type: Long).
-//fromDate: The starting date of the reservation (type: LocalDate).
-//toDate: The ending date of the reservation (type: LocalDate).
-//pickUpLocation: The location where the car will be picked up.
-//dropoffLocation: The location where the car will be dropped off.

@@ -1,22 +1,22 @@
 package za.co.protogen.utility;
 
-import za.co.protogen.domain.User;
+import za.co.protogen.domain.user;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 public class Constant {
-    public static List<User> users = new ArrayList<>();
+    public static List<user> users = new ArrayList<>();
     static {
 // Add mock data
-        User user1 = new User();
+        user user1 = new user();
         user1.setId(1L);
         user1.setFirstName("John");
         user1.setLastName("Doe");
         user1.setDateOfBirth(LocalDate.of(1990, 1, 1));
         user1.setRsaId("1234567890123");
         users.add(user1);
-        User user2 = new User();
+        user user2 = new user();
         user2.setId(2L);
         user2.setFirstName("Jane");
         user2.setLastName("Smith");

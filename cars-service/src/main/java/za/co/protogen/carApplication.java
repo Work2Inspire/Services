@@ -5,18 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
-
-
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.web.bind.annotation.RestController;
-import za.co.protogen.controller.carServiceApiController;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableEurekaServer
 public class carApplication {
     public static void main(String[] args) {
-        SpringApplication.run(clientApplication.class,args);
+        SpringApplication.run(carApplication.class,args);
     }
 }
 

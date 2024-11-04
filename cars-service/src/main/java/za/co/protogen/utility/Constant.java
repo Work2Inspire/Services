@@ -1,14 +1,14 @@
 package za.co.protogen.utility;
 
-import za.co.protogen.domain.Car;
+import za.co.protogen.domain.car;
 
 import java.util.ArrayList;
 import java.util.List;
 public class Constant {
-    public static List<Car> cars = new ArrayList<>();
+    public static List<car> cars = new ArrayList<>();
     static {
 // Add mock data
-        Car car1 = new Car();
+        car car1 = new car();
         car1.setMake("Toyota");
         car1.setModel("Corolla");
         car1.setYear(2021);
@@ -22,7 +22,7 @@ public class Constant {
         car1.setOwnerId(123);
         car1.setFeatures(new ArrayList<>());
         cars.add(car1);
-        Car car2 = new Car();
+        car car2 = new car();
         car2.setMake("Honda");
         car2.setModel("Civic");
         car2.setYear(2021);

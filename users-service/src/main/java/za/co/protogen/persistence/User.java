@@ -1,8 +1,15 @@
-package za.co.protogen.domain;
+package za.co.protogen.persistence;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "Users")
 public class User {
+    @Id
     private long id;
     private String firstName;
     private String LastName;
@@ -49,3 +56,4 @@ public class User {
         this.firstName = firstName;
     }
 }
+
