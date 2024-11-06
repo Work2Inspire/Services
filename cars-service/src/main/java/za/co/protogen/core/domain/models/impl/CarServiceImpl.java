@@ -1,15 +1,15 @@
-package za.co.protogen.core.impl;
+package za.co.protogen.core.domain.models.impl;
 
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import za.co.protogen.adapter.CarMapperImpl;
 import za.co.protogen.core.CarService;
-import za.co.protogen.persistence.Car;
+import za.co.protogen.persistence.models.Car;
 import za.co.protogen.persistence.repository.CarRepository;
-import za.co.protogen.utility.Constant;
 
-import javax.naming.Context;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -18,11 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @Component
 public class CarServiceImpl implements CarService {
-    // Injecting the JPA repository
-//    @Autowired
-//    private CarRepository carRepository;
 
-//Alt
     private final CarRepository carRepository;
 
     // Spring will automatically inject CarRepository here
@@ -30,63 +26,71 @@ public class CarServiceImpl implements CarService {
     public CarServiceImpl(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
+    @Autowired
+    CarMapperImpl carMapperImpl;
 
     @Override
-    public String addCar(Car car) {
-        Car newCar=new Car();
-        newCar.setVin(car.getVin());
-        newCar.setMake(car.getMake());
-        newCar.setModel(car.getModel());
-        newCar.setYear(car.getYear());
-        newCar.setColor(car.getColor());
-        newCar.setEngine(car.getEngine());
-        newCar.setTransmission(car.getTransmission());
-        newCar.setFuelType(car.getFuelType());
-        newCar.setColor(car.getColor());
-        newCar.setMileage(car.getMileage());
-        newCar.setPrice(car.getPrice());
-        newCar.setOwnerId(car.getOwnerId());
-        newCar.setFeatures(car.getFeatures());
+    public ResponseEntity<String> addCar(String vin) {
+
+        Car newCar = new Car();
+        newCar.setMake("Moro");
+        newCar.setModel("BMW");
+        newCar.setYear(2021);
+        newCar.setColor("White");
+        newCar.setEngine("1.8L");
+        newCar.setTransmission("Automatic");
+        newCar.setFuelType("Gasoline");
+        newCar.setMileage(10000);
+        newCar.setVin(vin);
+        newCar.setPrice(25000);
+        newCar.setOwnerId(123);
+        newCar.setFeatures(new ArrayList<>());
 
         carRepository.save(newCar);
-//        Constant.cars.add(car);
-        return "Car Added Successfully!<br/>" +"There is now " + carRepository.findAll().size() + " cars";
+
+        return ResponseEntity.ok("Car Added Successfully!<br/>Available cars:" + carRepository.findAll().size());
     }
 
     @Override
-    public String removeCar(Car car) {
+    public ResponseEntity<String> removeCar(Car car) {
         boolean found;
 //        found=Constant.cars.removeIf(a->a.equals(car));
         found=carRepository.existsById(car.getVin());
         if (found){
             carRepository.delete(car);
-            return "Car Added Successfully!<br/>There is now" + carRepository.findAll().size() + " cars";
+            return ResponseEntity.ok( "Car removed Successfully!<br/>"+ carRepository.findAll().size() + " cars available");
         }
         else {
-            return "Error: Car not found or no car entered";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Car not found or no car entered");
         }
     }
 
     @Override
     public Car getCarById(String vin) {
-//        car foundCar = Constant.cars.stream().filter(a->a.getVin().equals(vin)).findFirst().orElse(null);
 //        Car foundCar=carRepository.getReferenceById(vin);
         Car foundCar=carRepository.findAll().stream().filter(a->a.getVin().equals(vin)).findFirst().orElse(null);
-        //orElseThrow(()->new RuntimeException("No car with that ID found"));  Not clean
+
+
         return foundCar;
     }//searches for and returns a specific car using its unique vin else return null
 
     @Override
-    public List<Car> getAllCars() {
+    public ResponseEntity<String> getAllCars() {
+        if (carRepository.findAll().isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Repository Empty: No cars to return");
+        }
 
-        return carRepository.findAll();
-//        Constant.cars;
+        return ResponseEntity.ok(carRepository.findAll().toString());
     }
 
     @Override
     public List<Car> getCarsByMake(String make) {
-//Also
+
+        if (carRepository.findAll().isEmpty()){
+            return null;
+        }
        List<Car> ListToReturn = carRepository.findAll().stream().filter(a->a.getMake().equals(make)).collect(Collectors.toList());
+       System.out.println(ListToReturn);
 
        return ListToReturn;
 //        return carRepository.getCarsByMake(make);
@@ -94,14 +98,19 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Car> getCarsByYear(int year) {
+        if (carRepository.findAll().isEmpty()){
+            return null;
+        }
         List<Car> ListToReturn = carRepository.findAll().stream().filter(a->a.getYear()==year).toList();
-
         return ListToReturn;
 //        return carRepository.getCarsByYear(year);
     }
 
     @Override
     public List<Car> getCarsByColor(String color) {
+        if (carRepository.findAll().isEmpty()){
+            return null;
+        }
         List<Car> ListToReturn = carRepository.findAll().stream().filter(a->a.getColor().equals(color)).collect(Collectors.toList());
 
         return ListToReturn;
@@ -109,7 +118,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public String updateCar(Car car, String ansUpdate, String ansUpdateTo) {
+    public ResponseEntity<String> updateCar(Car car, String ansUpdate, String ansUpdateTo) {
 
         switch (ansUpdate) {
             case "a" :
@@ -144,14 +153,18 @@ public class CarServiceImpl implements CarService {
                 break;
          }
         carRepository.save(car);
-        return "Update successful <br/>"+car.toString();
+        return ResponseEntity.ok("Update successful <br/>"+car);
     }
 
     @Override
     public double calculateAverageMileage() {
+        if (carRepository.findAll().isEmpty()){
+            return 0;
+        }// if no cars exist return 0.00 avg
+
         Long CarCount = carRepository.count();
         int MileageTotal=0;
-        double totAvg = 0.00;
+        double totAvg;
 
         for (int i = 0; i < carRepository.findAll().size() ; i++) {
             MileageTotal+=carRepository.findAll().get(i).getMileage();
@@ -193,6 +206,10 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Car> searchCars(String criteria) {
+        if (carRepository.findAll().isEmpty()){
+            return null;
+        }
+
         List<String> strListOfCars = new ArrayList<>();
         List<String> splitStringCriteria = new ArrayList<>();
         //stores the criteria split using " " as delimeter

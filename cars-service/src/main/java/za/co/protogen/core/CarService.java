@@ -1,21 +1,22 @@
 package za.co.protogen.core;
 
-import za.co.protogen.persistence.Car;
+import org.springframework.http.ResponseEntity;
+import za.co.protogen.persistence.models.Car;
 
 import java.util.List;
 
 
 public interface CarService {
 
-    String addCar(Car car);
+    ResponseEntity<String> addCar(String vin);
     //adds a car to the List of cars in service
-    String removeCar(Car car);
+    ResponseEntity<String> removeCar(Car car);
     //removes a car from the List of cars in service
 
     Car getCarById(String vin);
     //Retrieves a car from the service based on its unique identifier.
 
-    List<Car> getAllCars();
+    ResponseEntity<String> getAllCars();
     //Retrieves a list of all cars in the service.
 
     List<Car> getCarsByMake(String make);
@@ -27,7 +28,7 @@ public interface CarService {
     List<Car> getCarsByColor(String color);
     //Retrieves a list of cars with the specified color.
 
-    String updateCar(Car car, String ansUpdate, String ansUpdateTo);
+    ResponseEntity<String> updateCar(Car car, String ansUpdate, String ansUpdateTo);
     //Updates the information or attributes of a car.
 
     double calculateAverageMileage();

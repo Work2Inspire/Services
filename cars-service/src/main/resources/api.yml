@@ -1,0 +1,481 @@
+openapi: "3.0.1"
+info:
+  title: carsServiceAPI
+  version: 1.0.0
+paths:
+  /add_car/{vin}:
+    post:
+      summary: Create new car
+      operationId: createCar
+      tags:
+        - cars
+        - new
+        - add
+      parameters:
+        - name: vin
+          in: path
+          required: true
+          description: The vin(Vehicle Identification Number) of the car to retrieve
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+      responses:
+        '200':
+          description: Successful responds with message and repository current size
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                example:
+                  value:
+                    "Car Added Successfully!<br/>Available cars: 3"
+  /remove_car:
+    delete:
+      summary: Find and Delete car using vin (Vehicle Identification Number)
+      operationId: deleteCar
+      tags:
+        - cars
+        - remove
+        - delete
+      parameters:
+        - name: vin
+          in: query
+          required: true
+          description: Vin (Vehicle Identification Number) to find car
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful responds with message and repository current size
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                example:
+                  value:
+                    "Car Added Successfully!<br/>Available cars: 3"
+        '404':
+          description: Car not found
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                example:
+                  value:
+                    "Error: Car not found or no car entered"
+  /getCar_id:
+    get:
+      summary: Find and Return car using vin (Vehicle Identification Number)
+      operationId: getBy_Id
+      tags:
+        - car
+        - find
+        - id
+        - return
+      parameters:
+        - name: vin
+          in: query
+          required: true
+          description: Vin (Vehicle Identification Number) to find car
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful. Responds with returned Car
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: No Car matches vin criteria or repository empty
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                example:
+                  value:
+                    "Error: No car matches criteria OR repository empty"
+  /getAllCars:
+    get:
+      summary: Return all cars
+      operationId: getAll
+      tags:
+        - car
+        - All
+      responses:
+        '200':
+          description: Successful. Responds with List of cars
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Repository empty
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                example:
+                  value:
+                    "Repository Empty: No cars to return"
+  /getCar_make:
+    get:
+      summary: Find and Return car using make
+      operationId: getBy_make
+      tags:
+        - car
+        - find
+        - make
+        - return
+      parameters:
+        - name: make
+          in: query
+          required: true
+          description: Car make used to retrieve car
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Responds. Return List of Cars matching make criteria
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: No Car matches make criteria or Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+                noMatch:
+                  value: "No match using criteria"
+  /getCar_year:
+    get:
+      summary: Find and Return car using year
+      operationId: getBy_year
+      tags:
+        - car
+        - find
+        - year
+        - return
+      parameters:
+        - name: year
+          in: query
+          required: true
+          description: Car year used to retrieve car
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Responds. Return List of Cars matching year criteria
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: No Car matches year criteria or Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+                noMatch:
+                  value: "No match using criteria"
+  /getCar_color:
+    get:
+      summary: Find and Return car using color
+      operationId: getBy_color
+      tags:
+        - car
+        - find
+        - color
+        - return
+      parameters:
+        - name: color
+          in: query
+          required: true
+          description: Car color used to retrieve car
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Responds. Return List of Cars matching color criteria
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: No Car matches color criteria or Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+                noMatch:
+                  value: "No match using criteria"
+  /update/{vin}/{sWhat}/{sTo}:
+    put:
+      summary: Update car
+      operationId: updateCar
+      tags:
+        - car
+        - update
+      parameters:
+        - name: vin
+          in: path
+          required: true
+          description: Car vin (Vehicle Identification Number) used to retrieve car
+          schema:
+            type: string
+        - name: sWhat
+          in: path
+          required: true
+          description: The letter corresponding to the field to Update
+          schema:
+            type: string
+        - name: sTo
+          in: path
+          required: true
+          description: new data to replace the data of a chosen field with
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Responds. Return message and updated car
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: Letter that is not an option selected
+          content:
+            text/html:
+              schema:
+                type: string
+  /avg_mileage:
+    get:
+      summary: Get average mileage
+      operationId: getAvgMileage
+      tags:
+        - avg
+        - mileage
+        - get
+        - return
+      responses:
+        '200':
+          description: Successful Responds. Return average mileage
+          content:
+            text/html:
+              schema:
+                type: number
+                format: double
+        '404':
+          description: Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              example:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+                noMatch:
+                  value: "No match using criteria"
+  /find_cheapest:
+    get:
+      summary: Return cheapest car
+      operationId: getCheapest
+      tags:
+        - car
+        - cheapest
+        - get
+        - return
+      responses:
+        '200':
+          description: Successful Responds. Return car with lowest price
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              example:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+  /find_Expensive:
+    get:
+      summary: Return most expensive car
+      operationId: getExpensive
+      tags:
+        - car
+        - expensive
+        - get
+        - return
+      responses:
+        '200':
+          description: Successful Responds. Return car with highest price
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              example:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+  /find_Newest:
+    get:
+      summary: Return newest car
+      operationId: getNewest
+      tags:
+        - car
+        - newest
+        - get
+        - return
+      responses:
+        '200':
+          description: Successful Responds. Return car with highest year
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              example:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+  /find_Oldest:
+    get:
+      summary: Return oldest car
+      operationId: getOldest
+      tags:
+        - car
+        - oldest
+        - get
+        - return
+      responses:
+        '200':
+          description: Successful Responds. Return car with lowest year
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              example:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+  /search/{criteria}:
+    get:
+      summary: Search cars that meet criteria
+      operationId: searchCars
+      tags:
+        - car
+        - search
+        - criteria
+        - get
+        - return
+      parameters:
+        - name: criteria
+          in: path
+          required: true
+          description: search criteria to find car
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Responds. Return List of cars meeting criteria in any field
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                emptyRepository:
+                  value: "Empty Repository: No cars to return"
+                noMatch:
+                  value: "No match using criteria"
+
+components:
+  schemas:
+    Car:
+      type: object
+      properties:
+        vin:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        color:
+          type: string
+        engine:
+          type: string
+        transmission:
+          type: string
+          enum:
+            - Automatic
+            - Manual
+            - CVT
+        fuelType:
+          type: string
+          enum:
+            - Gasoline
+            - Diesel
+            - Electric
+        mileage:
+          type: integer
+        price:
+          type: integer
+        ownerId:
+          type: integer
+#        features:
+#          type: array
+#          items:
+#            type: string
+        features:
+          type: string
+
+      required:
+        - vin
+
+

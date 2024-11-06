@@ -1,35 +1,27 @@
-package za.co.protogen.persistence;
+package za.co.protogen.core.domain;
 
-import jakarta.persistence.*;
-
-import java.util.Arrays;
 import java.util.List;
 
-enum Transmission {Manual,Automatic,CVT}
-enum FuelType {Gasoline, Diesel, Electric}
+enum etransmission {Manual,Automatic,CVT}
+enum efuelType {Gasoline, Diesel, Electric}
 
-@Entity
-@Table(name = "Cars")
-public class Car {
-    @Id
+
+public class car {
     private String vin;
     //A unique identifier assigned to the car (Vehicle Identification Number).
     private String make;
     //The car's manufacturer or brand.
     private String model;
     //The specific model name or number.
-    @Column(name = "iyear")
     private int year;
     //The year the car was manufactured.
     private String color;
     //The color of the car's exterior.
     private String engine;
     //Details about the car's engine, such as type, displacement, or horsepower.
-    @Enumerated(EnumType.STRING)
-    private Transmission transmission;
+    private etransmission transmission;
     //The type of transmission the car has (e.g., manual, automatic).
-    @Enumerated(EnumType.STRING)
-    private FuelType fuelType;
+    private efuelType fuelType;
     //The type of fuel the car uses (e.g., gasoline, diesel, electric).
     private int mileage;
     //The number of miles the car has traveled.
@@ -37,14 +29,30 @@ public class Car {
     //The price of the car.
     private int ownerId;
     //The owner's unique identifier.
-    private String features;
-//A list of additional features or options the car may have, such as a navigation system, sunroof, etc.
+    private List<String> features;
+    //A list of additional features or options the car may have, such as a navigation system, sunroof, etc.
 
     @Override
     public String toString() {
         return "Car{make='"+make+"', model="+model+"', year="+year+"', color="+color+"', engine="+engine+"', transmission="+transmission+"', fuelType="+fuelType+"', mileage="+mileage+"', vin="+vin+"', price="+price+"', ownerId="+ownerId+"', features="+features+" }";
     }//For better retrieval
 
+//    Car(String make,String model,int year,String color,String engine,String transmission,String fuelType,int mileage,String vin,int price,int ownerId,List<String> features){
+//        this.make=make;
+//        this.model=model;
+//        this.year=year;
+//        this.color=color;
+//        this.engine=engine;
+//        setTransmission(transmission);
+//        setFuelType(fuelType);
+//        this.mileage=mileage;
+//        this.vin=vin;
+//        this.price=price;
+//        this.ownerId=ownerId;
+//        this.features=features;
+//    }
+
+    //setter methods for every property declared------------------------------------------------
     public void setMake(String make){
         this.make=make;
     }
@@ -62,7 +70,7 @@ public class Car {
     }
     public void setTransmission(String Transmission){
         try {
-            this.transmission= za.co.protogen.persistence.Transmission.valueOf(Transmission);
+            this.transmission=etransmission.valueOf(Transmission);
         }catch (Exception e){
             System.out.println("Error: Defaulting to Null");
             this.transmission=null;
@@ -71,7 +79,7 @@ public class Car {
 
     public void setFuelType(String FuelType){
         try {
-            this.fuelType= za.co.protogen.persistence.FuelType.valueOf(FuelType);
+            this.fuelType=efuelType.valueOf(FuelType);
         }catch (Exception e){
             System.out.println("Error: Defaulting to Null");
             this.fuelType=null;
@@ -92,14 +100,10 @@ public class Car {
         this.ownerId=ownerId;
     }
     public void setFeatures(List<String> features){
-        StringBuilder strList= new StringBuilder();
-        for (int i = 0; i < features.size(); i++) {
-            strList.append(features.get(i)).append(",");
-        }
-        this.features=strList.toString();
+        this.features=features;
     }
 
-    //getters methods for every property declared-----------------------------------------------
+     //getters methods for every property declared-----------------------------------------------
     public String getMake(){
         return this.make;
     }
@@ -134,10 +138,20 @@ public class Car {
         return this.ownerId;
     }
     public List<String> getFeatures(){
-        List<String> ListToReturn;
-        ListToReturn= Arrays.stream(this.features.split(",")).toList();
-
-        return ListToReturn;
+        return this.features;
     }
-
 }
+
+//make: The car's manufacturer or brand.
+//model: The specific model name or number.
+//year: The year the car was manufactured.
+//color: The color of the car's exterior.
+//engine: Details about the car's engine, such as type, displacement, or horsepower.
+//transmission: The type of transmission the car has (e.g., manual, automatic).
+//fuelType: The type of fuel the car uses (e.g., gasoline, diesel, electric).
+//mileage: The number of miles the car has traveled.
+//vin: A unique identifier assigned to the car (Vehicle Identification Number).
+//price: The price of the car.
+//ownerId: The owner's unique identifier.
+//features: A list of additional features or options the car may have, such as a navigation system,
+//sunroof, etc.

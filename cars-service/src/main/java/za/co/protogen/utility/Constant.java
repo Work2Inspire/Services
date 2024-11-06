@@ -1,6 +1,6 @@
 package za.co.protogen.utility;
 
-import za.co.protogen.domain.car;
+import za.co.protogen.core.domain.car;
 
 import java.util.ArrayList;
 import java.util.List;
