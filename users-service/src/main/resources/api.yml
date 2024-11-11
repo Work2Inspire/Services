@@ -1,0 +1,268 @@
+openapi: "3.0.1"
+info:
+  title: userServiceAPI
+  version: 1.0.0
+paths:
+  /add_user:
+    post:
+      summary: Create new user
+      operationId: createUser
+      tags:
+        - user
+        - new
+        - add
+      parameters:
+        - name: Id
+          in: query
+          required: true
+          description: The user identification number
+          schema:
+            type: integer
+            format: int64
+        - name: fName
+          in: query
+          required: true
+          description: The user's first name
+          schema:
+            type: string
+        - name: lName
+          in: query
+          required: true
+          description: The user's last name
+          schema:
+            type: string
+        - name: DOB
+          in: query
+          required: true
+          description: The user's date of birth
+          schema:
+            type: string
+            format: date
+        - name: rsaId
+          in: query
+          required: true
+          description: South African Id Number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful - responds with message and the list of all users
+          content:
+            text/html:
+              schema:
+                type: string
+  /remove_user:
+    delete:
+      summary: Find and Delete user using userId)
+      operationId: deleteUser
+      tags:
+        - users
+        - remove
+        - delete
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: Id of user to remove
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful responds with message and all users in repository
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: User not found or No users in repository
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                emptyRepository:
+                  value: "Empty Repository: No users to return"
+                noMatch:
+                  value: "No match using criteria"
+  /getUser_id:
+    get:
+      summary: Find and Return user using userId
+      operationId: getBy_Id
+      tags:
+        - user
+        - find
+        - id
+        - return
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: userId of the user to return
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful. Responds message and with user
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: No User matches userId criteria or repository empty
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                example:
+                  value:
+                    "Error: No user matches criteria OR repository empty"
+  /getAllUsers:
+    get:
+      summary: Return all users
+      operationId: getAllUsers
+      tags:
+        - user
+        - All
+        - users
+      responses:
+        '200':
+          description: Successful. Responds with message and List of users
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Repository empty
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                example:
+                  value:
+                    "Repository Empty: No users to return"
+  /update/{userId}/{sWhat}/{sTo}:
+    put:
+      summary: Update user
+      operationId: updateUser
+      tags:
+        - user
+        - update
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Id to identify the User
+          schema:
+            type: string
+        - name: sWhat
+          in: path
+          required: true
+          description: The letter corresponding to the field to Update
+          schema:
+            type: string
+        - name: sTo
+          in: path
+          required: true
+          description: new data to replace the data of a chosen field with
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Responds. Return message and updated user
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Repository is empty
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: Letter that is not an option selected
+          content:
+            text/html:
+              schema:
+                type: string
+  /search/{criteria}:
+    get:
+      summary: Search users that meet criteria
+      operationId: searchUser
+      tags:
+        - user
+        - search
+        - criteria
+        - get
+        - return
+      parameters:
+        - name: criteria
+          in: path
+          required: true
+          description: search criteria to find user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Responds. Return List of users meeting criteria in any field
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Empty Repository
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                emptyRepository:
+                  value: "Empty Repository: No users to return"
+                noMatch:
+                  value: "No match using criteria"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        DateOfBirth:
+          type: string
+          format: date
+          example: "2023-08-11"     
+      required:
+        - userId
+        - firstName
+        - lastName
+    DUser:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        DateOfBirth:
+          type: string
+          format: date
+          example: "2023-08-11"
+        rsaId:
+          type: string
+      required:
+        - userId
+        - firstName
+        - lastName
+        - DateOfBirth
+        - rsaId

@@ -1,6 +1,6 @@
 openapi: "3.0.1"
 info:
-  title: carsServiceAPI
+  title: carServiceAPI
   version: 1.0.0
 paths:
   /add_car/{vin}:
@@ -18,12 +18,10 @@ paths:
           description: The vin(Vehicle Identification Number) of the car to retrieve
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Car'
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Car'
       responses:
         '200':
           description: Successful responds with message and repository current size
@@ -468,14 +466,9 @@ components:
           type: integer
         ownerId:
           type: integer
-#        features:
-#          type: array
-#          items:
-#            type: string
         features:
-          type: string
-
+          type: array
+          items:
+            type: string
       required:
         - vin
-
-
