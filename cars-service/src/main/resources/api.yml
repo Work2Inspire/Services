@@ -3,7 +3,7 @@ info:
   title: carServiceAPI
   version: 1.0.0
 paths:
-  /add_car/{vin}:
+  /cars:
     post:
       summary: Create new car
       operationId: createCar
@@ -11,29 +11,35 @@ paths:
         - cars
         - new
         - add
-      parameters:
-        - name: vin
-          in: path
-          required: true
-          description: The vin(Vehicle Identification Number) of the car to retrieve
-          schema:
-            type: string
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/Car'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarDto'
+      responses:
+        '201':
+          description: Car created successfully
+
+    get:
+      summary: Return all cars
+      operationId: getAll
+      tags:
+        - car
+        - All
       responses:
         '200':
-          description: Successful responds with message and repository current size
+          description: Cars returned successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-              examples:
-                example:
-                  value:
-                    "Car Added Successfully!<br/>Available cars: 3"
-  /remove_car:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
+        '404':
+          description: Cars not found
+
+  /cars/{vin}:
     delete:
       summary: Find and Delete car using vin (Vehicle Identification Number)
       operationId: deleteCar
@@ -43,36 +49,20 @@ paths:
         - delete
       parameters:
         - name: vin
-          in: query
+          in: path
           required: true
           description: Vin (Vehicle Identification Number) to find car
           schema:
             type: string
       responses:
         '200':
-          description: Successful responds with message and repository current size
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                example:
-                  value:
-                    "Car Added Successfully!<br/>Available cars: 3"
+          description: Car returned successfully by id
         '404':
           description: Car not found
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                example:
-                  value:
-                    "Error: Car not found or no car entered"
-  /getCar_id:
+
     get:
       summary: Find and Return car using vin (Vehicle Identification Number)
-      operationId: getBy_Id
+      operationId: getBy_Vin
       tags:
         - car
         - find
@@ -80,53 +70,48 @@ paths:
         - return
       parameters:
         - name: vin
-          in: query
+          in: path
           required: true
-          description: Vin (Vehicle Identification Number) to find car
+          description: Id of the car to return
           schema:
             type: string
       responses:
         '200':
-          description: Successful. Responds with returned Car
+          description: Car returned successfully by vin
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/CarDto'
         '404':
-          description: No Car matches vin criteria or repository empty
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                example:
-                  value:
-                    "Error: No car matches criteria OR repository empty"
-  /getAllCars:
-    get:
-      summary: Return all cars
-      operationId: getAll
+          description: Car not found
+
+    put:
+      summary: Update car
+      operationId: updateCar
       tags:
         - car
-        - All
+        - update
+      parameters:
+        - name: vin
+          in: path
+          required: true
+          description: Car vin (Vehicle Identification Number) used to retrieve car
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarDto'
       responses:
         '200':
-          description: Successful. Responds with List of cars
-          content:
-            text/html:
-              schema:
-                type: string
+          description: Car updated successfully
         '404':
-          description: Repository empty
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                example:
-                  value:
-                    "Repository Empty: No cars to return"
-  /getCar_make:
+          description: Car not found
+
+
+  /cars/make:
     get:
       summary: Find and Return car using make
       operationId: getBy_make
@@ -144,23 +129,17 @@ paths:
             type: string
       responses:
         '200':
-          description: Successful Responds. Return List of Cars matching make criteria
+          description: Cars returned successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
         '404':
-          description: No Car matches make criteria or Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-                noMatch:
-                  value: "No match using criteria"
-  /getCar_year:
+          description: Cars not found
+
+  /cars/year:
     get:
       summary: Find and Return car using year
       operationId: getBy_year
@@ -178,23 +157,18 @@ paths:
             type: integer
       responses:
         '200':
-          description: Successful Responds. Return List of Cars matching year criteria
+          description: Cars returned successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
         '404':
-          description: No Car matches year criteria or Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-                noMatch:
-                  value: "No match using criteria"
-  /getCar_color:
+          description: Cars not found
+
+
+  /cars/color:
     get:
       summary: Find and Return car using color
       operationId: getBy_color
@@ -212,62 +186,17 @@ paths:
             type: string
       responses:
         '200':
-          description: Successful Responds. Return List of Cars matching color criteria
+          description: Cars returned successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
         '404':
-          description: No Car matches color criteria or Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-                noMatch:
-                  value: "No match using criteria"
-  /update/{vin}/{sWhat}/{sTo}:
-    put:
-      summary: Update car
-      operationId: updateCar
-      tags:
-        - car
-        - update
-      parameters:
-        - name: vin
-          in: path
-          required: true
-          description: Car vin (Vehicle Identification Number) used to retrieve car
-          schema:
-            type: string
-        - name: sWhat
-          in: path
-          required: true
-          description: The letter corresponding to the field to Update
-          schema:
-            type: string
-        - name: sTo
-          in: path
-          required: true
-          description: new data to replace the data of a chosen field with
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful Responds. Return message and updated car
-          content:
-            text/html:
-              schema:
-                type: string
-        '400':
-          description: Letter that is not an option selected
-          content:
-            text/html:
-              schema:
-                type: string
-  /avg_mileage:
+          description: Cars not found
+
+  /cars/avg_mileage:
     get:
       summary: Get average mileage
       operationId: getAvgMileage
@@ -278,24 +207,14 @@ paths:
         - return
       responses:
         '200':
-          description: Successful Responds. Return average mileage
+          description: Returned avg mileage successfully
           content:
-            text/html:
+            application/json:
               schema:
                 type: number
                 format: double
-        '404':
-          description: Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              example:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-                noMatch:
-                  value: "No match using criteria"
-  /find_cheapest:
+
+  /cars/cheapest:
     get:
       summary: Return cheapest car
       operationId: getCheapest
@@ -306,21 +225,17 @@ paths:
         - return
       responses:
         '200':
-          description: Successful Responds. Return car with lowest price
+          description: Returned cheapest car successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
         '404':
-          description: Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              example:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-  /find_Expensive:
+          description: Cars not found
+
+  /cars/Expensive:
     get:
       summary: Return most expensive car
       operationId: getExpensive
@@ -331,21 +246,17 @@ paths:
         - return
       responses:
         '200':
-          description: Successful Responds. Return car with highest price
+          description: Returned most Expensive car successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
         '404':
-          description: Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              example:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-  /find_Newest:
+          description: Cars not found
+
+  /cars/Newest:
     get:
       summary: Return newest car
       operationId: getNewest
@@ -356,21 +267,17 @@ paths:
         - return
       responses:
         '200':
-          description: Successful Responds. Return car with highest year
+          description: Returned newest car successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
         '404':
-          description: Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              example:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-  /find_Oldest:
+          description: Cars not found
+
+  /cars/Oldest:
     get:
       summary: Return oldest car
       operationId: getOldest
@@ -381,21 +288,17 @@ paths:
         - return
       responses:
         '200':
-          description: Successful Responds. Return car with lowest year
+          description: Returned oldest car successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
         '404':
-          description: Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              example:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-  /search/{criteria}:
+          description: Cars not found
+
+  /cars/search:
     get:
       summary: Search cars that meet criteria
       operationId: searchCars
@@ -406,69 +309,131 @@ paths:
         - get
         - return
       parameters:
-        - name: criteria
-          in: path
-          required: true
-          description: search criteria to find car
+        - name: vin
+          in: query
           schema:
             type: string
+        - name: make
+          in: query
+          schema:
+            type: string
+        - name: model
+          in: query
+          schema:
+            type: string
+        - name: year
+          in: query
+          schema:
+            type: integer
+        - name: color
+          in: query
+          schema:
+            type: string
+        - name: engine
+          in: query
+          schema:
+            type: string
+        - name: transmission
+          in: query
+          schema:
+            type: string
+            enum:
+              - Automatic
+              - Manual
+              - CVT
+        - name: fuelType
+          in: query
+          schema:
+            type: string
+            enum:
+              - Gasoline
+              - Diesel
+              - Electric
+        - name: mileage
+          in: query
+          schema:
+            type: number
+            format: double
+        - name: Price
+          in: query
+          schema:
+            type: number
+            format: double
+        - name: ownerId
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: features
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
-          description: Successful Responds. Return List of cars meeting criteria in any field
+          description: Cars returned successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDto'
         '404':
-          description: Empty Repository
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-                noMatch:
-                  value: "No match using criteria"
+          description: Cars not found
+
 
 components:
   schemas:
-    Car:
+    CarDto:
       type: object
       properties:
         vin:
           type: string
+          description: A unique identifier assigned to the car (Vehicle Identification Number)
         make:
           type: string
+          description: The car's manufacturer or brand
         model:
           type: string
+          description: The specific model name or number
         year:
           type: integer
+          description: The year the car was manufactured
         color:
           type: string
+          description: The color of the car's exterior
         engine:
           type: string
+          description: Details about the car's engine, such as type, displacement, or horsepower
         transmission:
           type: string
           enum:
             - Automatic
             - Manual
             - CVT
+          description: The type of transmission the car has (e.g., manual, automatic)
         fuelType:
           type: string
           enum:
             - Gasoline
             - Diesel
             - Electric
+          description: The type of fuel the car uses (e.g., gasoline, diesel, electric)
         mileage:
-          type: integer
+          type: number
+          format: double
+          description: The number of miles the car has traveled
         price:
-          type: integer
+          type: number
+          format: double
+          description: The price of the car
         ownerId:
           type: integer
+          format: int64
+          description: The owner's unique identifier.
         features:
           type: array
+          description:
           items:
             type: string
-      required:
-        - vin

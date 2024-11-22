@@ -3,7 +3,7 @@ info:
   title: reservationServiceAPI
   version: 1.0.0
 paths:
-  /addReservation:
+  /reservations:
     post:
       summary: Create new reservation
       operationId: createRes
@@ -11,61 +11,35 @@ paths:
         - Reservation
         - new
         - add
-      parameters:
-        - name: id
-          in: query
-          required: true
-          description: The unique identifier for the reservation
-          schema:
-            type: integer
-            format: int64
-        - name: userId
-          in: query
-          required: true
-          description: The unique identifier for the user associated with the reservation
-          schema:
-            type: integer
-            format: int64
-        - name: carId
-          in: query
-          required: true
-          description: The unique identifier for the car reserved
-          schema:
-            type: string
-        - name: fromDate
-          in: query
-          required: true
-          description: The starting date of the reservation
-          schema:
-            type: string
-            format: date
-        - name: toDate
-          in: query
-          required: true
-          description: The ending date of the reservation
-          schema:
-            type: string
-            format: date
-        - name: pLocation
-          in: query
-          required: true
-          description: The location where the car will be picked up
-          schema:
-            type: string
-        - name: dLocation
-          in: query
-          required: true
-          description: The location where the car will be dropped off.
-          schema:
-            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationDto'
       responses:
-        "200":
-          description: Successful. responds with message and all reservations
+        '201':
+          description: Reservation created successfully
+
+    get:
+      summary: Return all reservation
+      operationId: getAll_Res
+      tags:
+        - Reservation
+        - get
+        - All
+      responses:
+        '200':
+          description: Reservation returned successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-  "/removeReservation/{id}":
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservationDto'
+
+
+  /reservations/{id}:
     delete:
       summary: Remove a reservation
       operationId: removeRes
@@ -77,53 +51,16 @@ paths:
         - name: id
           in: path
           required: true
-          description: The unique identifier for the reservation
+          description: Id of reservation to remove
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: Successful. responds with message and all reservations in repository
-          content:
-            text/html:
-              schema:
-                type: string
-        "404":
-          description: Reservation Id not found or Repository Empty
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No reservations to return"
-                noMatch:
-                  value: "Error: ID not found"
-  /getAll_Reservations:
-    get:
-      summary: Return all reservation
-      operationId: getAll_Res
-      tags:
-        - Reservation
-        - get
-        - All
-      responses:
-        "200":
-          description: Successful. responds with message and all reservations in repository
-          content:
-            text/html:
-              schema:
-                type: string
-        "404":
-          description: Reservation Id not found
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No cars to return"
-  "/getReservation_ById/{id}":
+        '200':
+          description: Reservation returned successfully by id
+        '404':
+          description: Reservation not found
+
     get:
       summary: Returns a reservation using its unique identifier
       operationId: getReservationById
@@ -135,86 +72,49 @@ paths:
         - name: id
           in: path
           required: true
-          description: The unique identifier for the reservation
+          description: Id of the reservation to return
           schema:
             type: integer
             format: int64
       responses:
-        "200":
-          description: Successful. responds with message and corresponding reservation
+        '200':
+          description: Reservation returned successfully by id
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-        "404":
-          description: Reservation Id not found or Repository Empty
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No reservations to return"
-                noMatch:
-                  value: "Error: ID not found"
-  "/updateReservation/{reservationId}/{sWhat}/{sTo}":
-    patch:
+                $ref: '#/components/schemas/ReservationDto'
+        '404':
+          description: reservation not found
+
+    put:
       summary: Update a reservation
       operationId: updateReservation
       tags:
         - Reservation
         - update
         - change
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationDto'
       parameters:
-        - name: reservationId
+        - name: id
           in: path
+          description: id of a reservation to be updated
           required: true
-          description: The unique identifier for the reservation
           schema:
             type: integer
             format: int64
-        - name: sWhat
-          in: path
-          required: true
-          description: What to change (only the listed letters)
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 1
-        - name: sTo
-          in: path
-          required: true
-          description: content to update reservation field with
-          schema:
-            type: string
       responses:
-        "200":
-          description: Successful. responds with message and corresponding reservation
-          content:
-            text/html:
-              schema:
-                type: string
-        "400":
-          description: Wrong letter option selected
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                InvalidOption:
-                  value: "Error: Option is invalid"
-        "404":
-          description: Reservation Id not found or Repository Empty
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No reservations to return"
-                noMatch:
-                  value: "Error: ID not found"
-  "/searchReservation/{criteria}":
+        '200':
+          description: Reservation updated successfully
+        '404':
+          description: Reservation not found
+
+
+  /reservations/search:
     get:
       summary: search for reservations adhering to criteria
       operationId: searchReservation
@@ -223,53 +123,88 @@ paths:
         - search
         - lookup
       parameters:
-        - name: criteria
-          in: path
-          required: true
-          description: search criteria
+        - name: id
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: userId
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: carId
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: pickUpLocation
+          in: query
+          schema:
+            type: string
+        - name: dropOffLocation
+          in: query
           schema:
             type: string
       responses:
-        "200":
-          description: Successful. responds with message and list of reservations
+        '200':
+          description: Reservations returned successfully
           content:
-            text/html:
+            application/json:
               schema:
-                type: string
-        "404":
-          description: No reservations match or Repository Empty
-          content:
-            text/html:
-              schema:
-                type: string
-              examples:
-                emptyRepository:
-                  value: "Empty Repository: No reservations to return"
-                noMatch:
-                  value: No reservation match
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservationDto'
+        '404':
+          description: Reservation not found
+
+
 components:
   schemas:
-    Reservation:
+    ReservationDto:
       type: object
       properties:
         id:
           type: integer
           format: int64
+          description: The unique identifier for the reservation (type Long)
         userId:
           type: integer
           format: int64
+          description: The unique identifier for the user associated with the reservation (type Long)
         carId:
           type: integer
           format: int64
+          description: The unique identifier for the car reserved (type Long)
         fromDate:
           type: string
           format: date
+          description: The starting date of the reservation (type LocalDate)
         toDate:
           type: string
           format: date
+          description: The ending date of the reservation (type LocalDate)
         pickUpLocation:
           type: string
+          description: The location where the car will be picked up
         dropOffLocation:
           type: string
+          description: The location where the car will be dropped off.
       required:
         - id
+        - userId
+        - carId
+        - fromDate
+        - toDate
+        - pickUpLocation
+        - dropOffLocation

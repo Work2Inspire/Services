@@ -1,23 +1,15 @@
-Url List for Testing Purposes
+Sample code for Testing Purposes
 --------------------------------------
+localhost:9103/reservations
 
-/addReservation
-localhost:9103/addReservation?id=1&userId=101&carId=202&fromDate=2024-11-01&toDate=2024-11-10&pLocation=NewYork&dLocation=Boston
-
-/removeReservation/{id}
-localhost:9103/removeReservation/1
-
-/getAll_Reservations -patch
-localhost:9103/getAll_Reservations
-
-/getReservation_ById/{id}
-localhost:9103/getReservation_ById/1
-
-/updateReservation/{reservationId}/{sWhat}/{sTo}
-localhost:9103/updateReservation/1/b/123
-
-/searchReservation/{criteria}
-localhost:9103/searchReservation/criteria
-
-
+Reservations
+{
+    "id": 1,
+    "userId": 5,
+    "carId": 5,
+    "fromDate": "2021-05-12",
+    "toDate": "2028-07-12",
+    "pickUpLocation": "London",
+    "dropOffLocation": "Moscow"
+}
 End--------------------------------------------------------------------

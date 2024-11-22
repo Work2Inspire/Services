@@ -1,23 +1,15 @@
-Url List for Testing Purposes
+Sample code for Testing Purposes
 --------------------------------------
+localhost:9101/users
 
-/add_user
-localhost:9101/add_user?Id=1&fName=John&lName=Doe&DOB=1990-01-01&rsaId=1234567890123
-
-/remove_user
-localhost:9101/remove_user?id=1
-
-/getUser_id
-localhost:9101/getUser_id?userId=1
-
-/getAllUsers
-localhost:9101/getAllUsers
-
-/update/{userId}/{sWhat}/{sTo}:
-localhost:9101/update/1/c/Smith
-
-/search/{criteria}:
-localhost:9101/search/criteria
+Users
+{
+    "id": 1,
+    "firstName": "Karabo",
+    "lastName": "Mopana",
+    "dateOfBirth": "2021-02-01",
+    "rsaId": "2323232"
+}
 
 
 End--------------------------------------------------------------------
